@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>SampleVault - Admin Panel</title>
+    <link rel="stylesheet" href="../css/w3.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" type="image/png" href="../img/favicon.png">
+</head>
+<body>
+
+<div class="w3-bar w3-yellow w3-card">
+    <span class="w3-bar-item"><b>CONTROL DE ADMINISTRACIÓN</b></span>
+    <button class="w3-bar-item w3-button w3-right btn-logout">Salir</button>
+</div>
+
+<div class="w3-container w3-padding-32">
+    <h2 class="w3-text-white">Panel de Productores</h2>
+    <p>Visualización global de la base de datos.</p>
+
+    <div class="w3-responsive">
+        <table class="w3-table w3-striped w3-bordered vault-card">
+            <thead>
+                <tr class="w3-dark-grey">
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Rol</th>
+                    <th>Fecha Registro</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="usersTableBody">
+                </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="../js/services/apiService.js"></script>
+<script src="../js/utils/authHelper.js"></script>
+<script src="../js/components/uiHandlers.js"></script>
+<script src="../js/frontControllers/adminFrontController.js"></script>
+</body>
+</html>
