@@ -35,14 +35,14 @@ class SampleRepository
     }
 
     // Eliminar un sample validando la propiedad del mismo
-    async delete(id, userId) 
+async delete(id, userId) 
 {
     const [result] = await db.execute(
         'CALL sp_delete_sample(?, ?)',
         [id, userId]
     );
 
-    return result[0][0].affectedRows;
+    return result.affectedRows;
 }
 }
 

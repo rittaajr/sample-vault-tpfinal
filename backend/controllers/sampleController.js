@@ -83,14 +83,12 @@ class SampleController
 
             // 1. Obtener metadatos para conocer la ruta del archivo físico
             const sample = await sampleRepo.findById(id, userId);
-
             if (!sample) {
                 return res.status(404).json({ message: "El registro no existe o ya fue eliminado" });
             }
 
             // 2. Ejecutar sp_delete_sample en la base de datos
 const affectedRows = await sampleRepo.delete(id, userId);
-console.log("affectedRows:", affectedRows);
 if (affectedRows === 0) {
     return res.status(404).json({
         message: "El registro no existe o ya fue eliminado"
@@ -98,7 +96,9 @@ if (affectedRows === 0) {
 }
 
 // 3. Eliminación física del archivo
-fileHelper.deleteFile(sample.file_path);
+if (sample?.file_path) {
+    fileHelper.deleteFile(sample.file_path);
+}
             
             return res.json({ message: "Registro eliminado y archivo físico removido con éxito." });
         }
