@@ -83,9 +83,7 @@ class SampleController
 
             // 1. Obtener metadatos para conocer la ruta del archivo físico
             const sample = await sampleRepo.findById(id, userId);
-            console.log("ID:", id);
-            console.log("USER:", userId);
-            console.log("SAMPLE:", sample);
+
             if (!sample) {
                 return res.status(404).json({ message: "El registro no existe o ya fue eliminado" });
             }
