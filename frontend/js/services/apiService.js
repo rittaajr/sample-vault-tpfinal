@@ -6,7 +6,7 @@
 */
 
 // Configuración base de la API
-const API_URL = "http://localhost:3000/api";
+const API_URL = "https://symmetrical-halibut-q7wvj96gqp6gc9q5r-3000.app.github.dev/api";
 
 const apiService = {
     // Función centralizada para peticiones Fetch
