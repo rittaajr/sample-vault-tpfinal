@@ -61,3 +61,72 @@ testUtils.createTestButton("Test Subir Sample (Simulado)", async (btn) => {
     testUtils.log(data);
     if (response.ok) testUtils.setSuccess(btn);
 });
+
+/**
+ * Test 8: Seguridad - Eliminacion de Recurso Ajeno / IDOR.
+ */
+testUtils.createTestButton("Test 8 IDOR: Borrar Sample Ajeno", async (btn) => {
+    await okLogin();
+    const ownerToken = localStorage.getItem('test_token');
+
+    const attackerUsername = 'intruso_test_8';
+    const attackerPassword = '12345';
+
+    await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            username: attackerUsername,
+            password: attackerPassword
+        })
+    });
+
+    const loginResponse = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            username: attackerUsername,
+            password: attackerPassword
+        })
+    });
+
+    const loginData = await loginResponse.json();
+    const attackerToken = loginData.token;
+
+    const formData = new FormData();
+    formData.append('display_name', 'Sample IDOR Test');
+    formData.append('category', 'Drums');
+    formData.append('bpm', '120');
+
+    const blob = new Blob(["Simulated Audio Content"], { type: 'audio/wav' });
+    formData.append('audioFile', blob, 'IDOR_TEST_8.wav');
+
+    const uploadResponse = await fetch('/api/samples/upload', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${ownerToken}`
+        },
+        body: formData
+    });
+
+    const uploadedSample = await uploadResponse.json();
+
+    const deleteResponse = await fetch(`/api/samples/${uploadedSample.id}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${attackerToken}`
+        }
+    });
+
+    const data = await deleteResponse.json();
+    testUtils.log(data, deleteResponse.status !== 403);
+
+    if (
+        deleteResponse.status === 403 &&
+        data.message === "No tienes permisos para alterar este archivo"
+    ) {
+        testUtils.setSuccess(btn);
+    } else {
+        throw new Error("No se bloqueo correctamente el borrado de un sample ajeno");
+    }
+});
