@@ -6,7 +6,7 @@
 */
 
 // Configuración base de la API
-const API_URL = "http://localhost:3000/api";
+const API_URL = "https://ideal-guide-69xxw5x6jx5jfrg94-3000.app.github.dev/api";
 
 const apiService = {
     // Función centralizada para peticiones Fetch
