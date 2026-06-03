@@ -61,3 +61,31 @@ testUtils.createTestButton("Test Subir Sample (Simulado)", async (btn) => {
     testUtils.log(data);
     if (response.ok) testUtils.setSuccess(btn);
 });
+/**
+ * Test: DELETE /api/samples/:id con ID inexistente
+ * Validación: debe responder 404 y mostrar mensaje de borrado fantasma
+ */
+testUtils.createTestButton("Test Borrado Fantasma - Sample Inexistente", async (btn) => {
+    // 1. Asegurar y guardar una sesión válida
+    await okLogin();
+    const token = localStorage.getItem('test_token');
+
+    // 2. Intentar eliminar un sample que no existe
+    const response = await fetch('/api/samples/99999', {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    const data = await response.json();
+    testUtils.log(data);
+
+    // 3. Validar HTTP 404 y mensaje esperado
+    if (
+        response.status === 404 &&
+        data.message === "El registro no existe o ya fue eliminado"
+    ) {
+        testUtils.setSuccess(btn);
+    } else {
+        throw new Error("El test de borrado fantasma falló");
+    }
+});
