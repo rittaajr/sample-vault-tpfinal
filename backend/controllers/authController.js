@@ -67,10 +67,7 @@ class AuthController
             if (!username || !password) {
                 return res.status(400).json({ message: "Credenciales incompletas." });
             }
-            // Validación de longitud mínima de la contraseña (Inciso 2 del enunciado del trabajo final).
-            if (password.trim().length < 6) {
-                return res.status(400).json({ message: "La contraseña es demasiado corta. (Minimo 6 caracteres)" });
-            }
+           
 
             // El repositorio ahora devuelve el usuario con su ROL gracias al JOIN en el SP
             const user = await userRepo.findByUsername(username);
