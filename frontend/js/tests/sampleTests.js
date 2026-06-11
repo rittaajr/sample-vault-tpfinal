@@ -2,8 +2,7 @@
  * Función para asegurar independencia de los tests de samples 
  * y no depender de otro test para tener un token de sesión válido
  */
- async function okLogin()
- {
+ async function okLogin() {
     // 1. Login como productor (pepe) para obtener un token válido
      const response = await fetch('/api/auth/login', {
          method: 'POST',
@@ -60,6 +59,7 @@ testUtils.createTestButton("Test Subir Sample (Simulado)", async (btn) => {
     const data = await response.json();
     testUtils.log(data);
     if (response.ok) testUtils.setSuccess(btn);
+}); // <-- ¡ESTO FALTABA ACÁ! AHORA EL BOTÓN CIERRA BIEN.
 
 
 /**
@@ -92,7 +92,6 @@ testUtils.createTestButton("Test Consigna 6: BPM Inválido", async (btn) => {
 
         const data = await response.json();
         
-        
         testUtils.log(data); 
 
         // 4. Verificamos que el servidor haya rebotado la petición correctamente
@@ -114,7 +113,3 @@ testUtils.createTestButton("Test Consigna 6: BPM Inválido", async (btn) => {
         testUtils.log({ error: "Excepción en el test: " + error.message });
     }
 });
-
-
-});
-

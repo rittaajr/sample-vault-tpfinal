@@ -34,7 +34,7 @@ class SampleController
             if (isNaN(ValidacionBpm) || ValidacionBpm < 20 || ValidacionBpm > 300) {
 
                 fileHelper.deleteFile(`/uploads/${req.file.filename}`);
-                return res.status(400).json({message: "BPM invalido. Ingrese un valor correcto" });
+                return res.status(400).json({message: "BPM inválido. Ingrese un valor numérico correcto" });
             }
 
             const userId = req.userId; // Proveniente del verifyToken
