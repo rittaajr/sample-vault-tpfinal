@@ -30,7 +30,7 @@ class AuthController
             }
             // Validación de longitud mínima de la contraseña (Inciso 2 del enunciado del trabajo final).
             if (password.trim().length < 6) {
-                return res.status(400).json({ message: "La contraseña es demasiado corta. (Minimo 6 caracteres)" });
+                return res.status(400).json({ message: "La contraseña es demasiado corta." });
             }
             // Si la contraseña es válida, recien se hace el hashing, para no gastar recursos innecesariamente.
             const hashedPassword = await bcrypt.hash(password, 10);            
