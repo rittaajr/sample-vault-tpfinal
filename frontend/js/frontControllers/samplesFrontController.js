@@ -44,7 +44,7 @@ function renderSamplesTable(samples) {
         const audio = document.createElement('audio');
         audio.controls = true;
         const source = document.createElement('source');
-        source.src = `http://localhost:3000${s.file_path}`;
+        source.src = `${API_URL.replace('/api', '')}${s.file_path}`;
         source.type = 'audio/mpeg';
         audio.appendChild(source);
         tdAudio.appendChild(audio);
