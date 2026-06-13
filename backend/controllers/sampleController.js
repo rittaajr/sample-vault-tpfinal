@@ -85,9 +85,19 @@ class SampleController
             const sample = await sampleRepo.findById(id, userId);
 
             if (!sample) {
-                return res.status(404).json({
-                    message: "El registro no existe o ya fue eliminado"
-                });
+
+              const existingSample = await sampleRepo.findAnyById(id);
+
+             if (existingSample) {
+               return res.status(403).json({
+                    message: "No tienes permisos para alterar este archivo"
+               });
+             }
+
+             return res.status(404).json({
+                message: "El registro no existe o ya fue eliminado"
+             });
+
             }
 
             // 2. Ejecutar sp_delete_sample en la base de datos
