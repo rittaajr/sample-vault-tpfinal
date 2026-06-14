@@ -68,8 +68,8 @@ testUtils.createTestButton("Test 8 IDOR: Borrar Sample Ajeno", async (btn) => {
     await okLogin();
     const ownerToken = localStorage.getItem('test_token');
 
-    const attackerUsername = 'intruso_test_8';
-    const attackerPassword = '12345';
+    const attackerUsername = 'intruso_test_8'+ Date.now();
+    const attackerPassword = '123456';
 
     await fetch('/api/auth/register', {
         method: 'POST',
