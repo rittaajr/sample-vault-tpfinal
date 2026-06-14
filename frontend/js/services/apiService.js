@@ -6,7 +6,7 @@
 */
 
 // Configuración base de la API
-const API_URL = "https://symmetrical-halibut-q7wvj96gqp6gc9q5r-3000.app.github.dev/api";
+const API_URL = "https://shiny-succotash-x5jr7pg6pq69cvx44-3000.app.github.dev/api";
 
 const apiService = {
     // Función centralizada para peticiones Fetch

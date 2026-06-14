@@ -34,12 +34,24 @@ class SampleRepository
         return rows[0][0]; 
     }
 
-    // Eliminar un sample validando la propiedad del mismo
-    async delete(id, userId) 
+    // Buscar un sample por ID sin validar propietario.
+    // Se usa solo para distinguir ID inexistente de recurso ajeno.
+    async findAnyById(id)
     {
-        await db.execute('CALL sp_delete_sample(?, ?)', [id, userId]);
-        return true;
+    const [rows] = await db.execute('SELECT * FROM samples WHERE id = ?', [id]);
+    return rows[0];
     }
+
+    // Eliminar un sample validando la propiedad del mismo
+async delete(id, userId) 
+{
+    const [result] = await db.execute(
+        'CALL sp_delete_sample(?, ?)',
+        [id, userId]
+    );
+
+    return result.affectedRows;
+}
 }
 
 module.exports = new SampleRepository();

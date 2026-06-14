@@ -29,6 +29,14 @@ class SampleController
                 return res.status(400).json({ message: "El nombre y la categoría son obligatorios." });
             }
 
+            // Consigna 6. validacion del BPM
+            const ValidacionBpm = parseInt(bpm,10) ;
+            if (isNaN(ValidacionBpm) || ValidacionBpm < 20 || ValidacionBpm > 300) {
+
+                fileHelper.deleteFile(`/uploads/${req.file.filename}`);
+                return res.status(400).json({message: "BPM inválido. Ingrese un valor numérico correcto" });
+            }
+
             const userId = req.userId; // Proveniente del verifyToken
             const filename = req.file.filename;
             const filePath = `/uploads/${filename}`;
@@ -39,7 +47,7 @@ class SampleController
                 filename,
                 display_name,
                 category,
-                bpm: parseInt(bpm) || 0,
+                bpm: ValidacionBpm,
                 file_path: filePath
             });
 
@@ -83,24 +91,48 @@ class SampleController
 
             // 1. Obtener metadatos para conocer la ruta del archivo físico
             const sample = await sampleRepo.findById(id, userId);
-            
+
             if (!sample) {
-                return res.status(404).json({ message: "El sample no existe o no tienes permisos para eliminarlo." });
+
+              const existingSample = await sampleRepo.findAnyById(id);
+
+             if (existingSample) {
+               return res.status(403).json({
+                    message: "No tienes permisos para alterar este archivo"
+               });
+             }
+
+             return res.status(404).json({
+                message: "El registro no existe o ya fue eliminado"
+             });
+
             }
 
             // 2. Ejecutar sp_delete_sample en la base de datos
-            await sampleRepo.delete(id, userId);
+            const affectedRows = await sampleRepo.delete(id, userId);
 
-            // 3. Eliminación física del archivo (Gestión de recursos)
-            fileHelper.deleteFile(sample.file_path); 
-            
-            return res.json({ message: "Registro eliminado y archivo físico removido con éxito." });
+            if (affectedRows === 0) {
+                return res.status(404).json({
+                    message: "El registro no existe o ya fue eliminado"
+                });
+            }
+
+            // 3. Eliminación física del archivo
+            if (sample?.file_path) {
+                fileHelper.deleteFile(sample.file_path);
+            }
+
+            return res.json({
+                message: "Registro eliminado y archivo físico removido con éxito."
+            });
         }
         catch (error)
         {
-            res.status(500).json({ message: "Error al eliminar el sample.", error: error.message });
+            res.status(500).json({
+                message: "Error al eliminar el sample.",
+                error: error.message
+            });
         }
     }
 }
-
 module.exports = new SampleController();
