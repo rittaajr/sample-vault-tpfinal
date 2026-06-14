@@ -28,7 +28,11 @@ class AuthController
             if (!username || !password) {
                 return res.status(400).json({ message: "Usuario y contraseña son requeridos." });
             }
-
+            // Validación de longitud mínima de la contraseña (Inciso 2 del enunciado del trabajo final).
+            if (password.trim().length < 6) {
+                return res.status(400).json({ message: "La contraseña es demasiado corta." });
+            }
+            // Si la contraseña es válida, recien se hace el hashing, para no gastar recursos innecesariamente.
             const hashedPassword = await bcrypt.hash(password, 10);            
             
             // 2. Creación mediante el repositorio (que usa el SP sp_create_user)
@@ -64,6 +68,7 @@ class AuthController
             if (!username || !password) {
                 return res.status(400).json({ message: "Credenciales incompletas." });
             }
+           
 
             // El repositorio ahora devuelve el usuario con su ROL gracias al JOIN en el SP
             const user = await userRepo.findByUsername(username);
