@@ -29,12 +29,15 @@ class SampleController
                 return res.status(400).json({ message: "El nombre y la categoría son obligatorios." });
             }
 
-            // Consigna 6. validacion del BPM
-            const ValidacionBpm = parseInt(bpm,10) ;
-            if (isNaN(ValidacionBpm) || ValidacionBpm < 20 || ValidacionBpm > 300) {
-
-                fileHelper.deleteFile(`/uploads/${req.file.filename}`);
-                return res.status(400).json({message: "BPM inválido. Ingrese un valor numérico correcto" });
+            // Consigna 6. validacion del BPM en caso de que ingrese un numero no valido o un texto
+            let ValidacionBpm = null;
+            if (bpm && bpm.trim() != ""){
+                ValidacionBpm = parseInt(bpm,10);
+                
+                if (isNaN(ValidacionBpm) || ValidacionBpm < 20 || ValidacionBpm > 300) {
+                    fileHelper.deleteFile(`/uploads/${req.file.filename}`);
+                    return res.status(400).json({message: "BPM inválido. Ingrese un valor numérico correcto" });
+                }
             }
 
             const userId = req.userId; // Proveniente del verifyToken
