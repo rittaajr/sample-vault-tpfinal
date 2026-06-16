@@ -75,7 +75,7 @@ testUtils.createTestButton("Test Consigna 6: BPM Inválido", async (btn) => {
     formData.append('display_name', 'Test BPM Roto');
     formData.append('category', 'Drums');
     
-    // Le pasamos un bpo en forma de texto en lugar de un numero
+    // Le pasamos un bpm en forma de texto en lugar de un numero
     formData.append('bpm', 'ciento veinte'); 
 
     // Simulamos un archivo WAV (binario vacío para la prueba)
